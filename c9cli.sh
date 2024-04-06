@@ -173,6 +173,17 @@ EOF
 
 # CREATE DOCKERLIMIT
 
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS="$NAME"
+        VER="$VERSION_ID"
+    else
+        echo "Unsupported OS. Exiting."
+        exit 1
+    fi
+}
+
 createnewdockermemlimit(){
     detect_os
 
