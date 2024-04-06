@@ -134,8 +134,10 @@ EOF
 detect_os() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
-        OS="$NAME"
+        OS="$ID"
         VER="$VERSION_ID"
+        echo "Detected OS: $OS"
+        echo "Detected Version: $VER"
     else
         echo "Unsupported OS. Exiting."
         exit 1
@@ -146,40 +148,34 @@ createnewdocker() {
     detect_os
 
     if [[ "$OS" == "Ubuntu" && "$VER" == "20.04" ]]; then
-        docker_image="fullaxx/cloud9-focal"
-    elif [[ "$OS" == "Debian" && "$VER" == "bullseye" ]]; then
-        docker_image="gvoze32/cloud9:bullseye"
-    elif [[ "$OS" == "Debian" && "$VER" == "latest" ]]; then
-        docker_image="gvoze32/cloud9:debian"
-    elif [[ "$OS" == "Alpine" && "$VER" == "latest" ]]; then
-        docker_image="gvoze32/cloud9:alpine"
+        docker_image="ibnufachrizal/ubuntu:lts"
     else
-        docker_image="sapk/cloud9:latest"
+        docker_image="gvoze32/cloud9:latest"
     fi
 
-    read -p "Username : " user
-    read -p "Password : " pw
-    read -p "Port : " port
-    cd /home/c9users
-    rm .env
-    sudo cat > /home/c9users/.env << EOF
+read -p "Username : " user
+read -p "Password : " pw
+read -p "Port : " port
+cd /home/c9users
+rm .env
+sudo cat > /home/c9users/.env << EOF
 PORT=$port
 NAMA_PELANGGAN=$user
 PASSWORD_PELANGGAN=$pw
 EOF
-    sudo docker-compose -p $user up -d
-    if [ -d "/home/c9users/$user" ]; then
-        cd /home/c9users/$user
+sudo docker-compose -p $user up -d
+if [ -d "/home/c9users/$user" ]; then
+cd /home/c9users/$user
 
-        ### Your custom default bundling files goes here, it's recommended to put it on resources directory
-        ### START
+### Your custom default bundling files goes here, it's recommended to put it on resources directory
+### START
 
-        ### END
+### END
 
-        cd
-    else
-        echo "Workspace directory not found"
-    fi
+cd
+else
+echo "Workspace directory not found"
+fi
 }
 
 # CREATE DOCKERLIMIT
