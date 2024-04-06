@@ -131,17 +131,28 @@ EOF
 
 # CREATE DOCKER
 
-createnewdocker(){
+detect_os() {
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        OS="$NAME"
+        VER="$VERSION_ID"
+    else
+        echo "Unsupported OS. Exiting."
+        exit 1
+    fi
+}
+
+createnewdocker() {
     detect_os
 
-    if [[ "$OS" == "debian" && "$VER" == "bullseye" ]]; then
-        docker_image="gvoze32/cloud9:bullseye"
-    elif [[ "$OS" == "debian" && "$VER" == "latest" ]]; then
-        docker_image="gvoze32/cloud9:debian"
-    elif [[ "$OS" == "alpine" && "$VER" == "latest" ]]; then
-        docker_image="gvoze32/cloud9:alpine"
-    elif [[ "$OS" == "ubuntu" && "$VER" == "20.04" ]]; then
+    if [[ "$OS" == "Ubuntu" && "$VER" == "20.04" ]]; then
         docker_image="fullaxx/cloud9-focal"
+    elif [[ "$OS" == "Debian" && "$VER" == "bullseye" ]]; then
+        docker_image="gvoze32/cloud9:bullseye"
+    elif [[ "$OS" == "Debian" && "$VER" == "latest" ]]; then
+        docker_image="gvoze32/cloud9:debian"
+    elif [[ "$OS" == "Alpine" && "$VER" == "latest" ]]; then
+        docker_image="gvoze32/cloud9:alpine"
     else
         docker_image="sapk/cloud9:latest"
     fi
@@ -172,17 +183,6 @@ EOF
 }
 
 # CREATE DOCKERLIMIT
-
-detect_os() {
-    if [ -f /etc/os-release ]; then
-        . /etc/os-release
-        OS="$NAME"
-        VER="$VERSION_ID"
-    else
-        echo "Unsupported OS. Exiting."
-        exit 1
-    fi
-}
 
 createnewdockermemlimit(){
     detect_os
