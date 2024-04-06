@@ -140,8 +140,8 @@ createnewdocker(){
         docker_image="gvoze32/cloud9:debian"
     elif [[ "$OS" == "alpine" && "$VER" == "latest" ]]; then
         docker_image="gvoze32/cloud9:alpine"
-    elif [[ "$OS" == "ubuntu" && "$VER" == "18.04" ]]; then
-        docker_image="gvoze32/cloud9:ubuntu"
+    elif [[ "$OS" == "ubuntu" && "$VER" == "20.04" ]]; then
+        docker_image="fullaxx/cloud9-focal"
     else
         docker_image="sapk/cloud9:latest"
     fi
